@@ -1,0 +1,32 @@
+class Main {
+
+ def app = new ApexApplication(new MyConfigurationModule());
+
+ app.parseCookies(); // Shortcut for app.addHandler(CookieHandler.create());
+
+ app.parseRequestBody(); // Shortcut for app.addHander(BodyHandler.create(), HttpMethod.POST, HttpMethod.PUT);
+
+ app.before("/secured", context -> { /* check for authentication */ } );
+
+ app.get("/", context -> { context.sendFile("views/index.html"); });
+
+ app.post("/users", { ctx -> /* Handle form data */ } );
+
+ app.mount("/admin", AdminRoutes.class);
+
+ app.listen(3000);
+
+}
+
+// Router
+
+class AdminRoutes extends ApexRouter {
+
+  {
+    before("/something", ctx -> { /* Run a before filter */ });
+
+    get("/", ctx -> {});
+
+  }
+
+}
