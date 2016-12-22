@@ -1,16 +1,12 @@
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpClientRequest;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestOptions;
 import io.vertx.ext.unit.TestSuite;
 import io.vertx.ext.unit.report.ReportOptions;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.Level;
 import io.vertx.ext.web.Router;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by ksheppard on 21/12/2016.
@@ -18,8 +14,8 @@ import org.slf4j.LoggerFactory;
 public class MyTestSuite {
 
     public static void main(String[] args) {
-        ((Logger) LoggerFactory.getLogger("io.netty")).setLevel(Level.INFO);
-        org.slf4j.Logger logger = LoggerFactory.getLogger(MyTestSuite.class);
+//        ((Logger) LoggerFactory.getLogger("io.netty")).setLevel(Level.INFO);
+//        org.slf4j.Logger logger = LoggerFactory.getLogger(MyTestSuite.class);
         TestSuite suite = TestSuite.create("apex-test-suite");
         Vertx vertx = Vertx.vertx();
         final HttpServer server = vertx.createHttpServer();
