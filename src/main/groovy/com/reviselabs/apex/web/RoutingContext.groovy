@@ -10,4 +10,23 @@ class RoutingContext {
         this.context = context;
         return this;
     }
+
+    RoutingContext ok() {
+        response().setStatusCode(200);
+        return this;
+    }
+
+    RoutingContext badRequest() {
+        response().setStatusCode(400);
+        return this;
+    }
+
+    RoutingContext forbidden() {
+        response().setStatusCode(401);
+        return this;
+    }
+
+    void close(String message = '') {
+        response().end(message);
+    }
 }

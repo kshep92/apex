@@ -20,7 +20,7 @@ class Main {
 
 // Router
 
-class AdminRoutes extends ApexRouter {
+class AdminRoutes extends com.reviselabs.apex.web.ApexRouter {
 
   {
     before("/something", ctx -> { /* Run a before filter */ });
