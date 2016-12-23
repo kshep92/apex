@@ -4,11 +4,19 @@ class Main {
 
  app.parseCookies(); // Shortcut for app.addHandler(CookieHandler.create());
 
- app.parseRequestBody(); // Shortcut for app.addHander(BodyHandler.create(), HttpMethod.POST, HttpMethod.PUT);
+ app.parseRequestBody(); // Shortcut for app.addHander(BodyHandler.create(), HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH);
+
+ app.static('/assets/*') // Default Handler
+
+ // Or
+
+ app.static('/assets/*, new StaticHandlerOptions(cacheSize: 300)) //Proxy for StaticHandler.create()
 
  app.before("/secured", context -> { /* check for authentication */ } );
 
  app.get("/", context -> { context.sendFile("views/index.html"); });
+
+ app.get("/view", context -> { context.html("dashboard.html", [email: 'kevin@mail.com']) }) // Rendering a view. We will use Handlebars by default.
 
  app.post("/users", { ctx -> /* Handle form data */ } );
 
@@ -30,3 +38,15 @@ class AdminRoutes extends com.reviselabs.apex.web.ApexRouter {
   }
 
 }
+
+Settings that need to be set:
+- View engine/renderer (also accessible via a renderer property to do HTML rendering
+out side of the context of a request; Useful for email template rendering.)
+- Templates folder
+
+app.setTemplateEngine(new FremarkerTemplateEngine(cache: 2, ...))
+
+app.put('/users/:id', { ctx -> 
+  def dao = ctx.inflate(DAO.class)
+  def user = dao.findById(ctx.getParam('id').intValue())
+})

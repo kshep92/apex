@@ -7,6 +7,7 @@ import io.vertx.core.http.HttpMethod
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.ext.web.handler.CookieHandler
+import io.vertx.ext.web.handler.StaticHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -20,6 +21,10 @@ class ApexApplication {
     ApexApplication() {
         delegate = new RoutingComponent();
         logger = LoggerFactory.getLogger(getClass())
+    }
+
+    private class Something {
+        @Delegate StaticHandler delegate = create();
     }
 
     ApexApplication addHandler(Handler<RoutingContext> handler, HttpMethod... methods) {
