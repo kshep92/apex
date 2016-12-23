@@ -1,8 +1,4 @@
-
-
-import io.vertx.ext.unit.TestOptions
 import io.vertx.ext.unit.TestSuite
-import io.vertx.ext.unit.report.ReportOptions
 
 public class RoutingComponentTest extends AppTestSuite {
 
@@ -61,6 +57,6 @@ public class RoutingComponentTest extends AppTestSuite {
                 // Shut down the application
                 app.stop(context.asyncAssertSuccess());
             })
-            .run(new TestOptions().addReporter(new ReportOptions().setTo("console")));
+            .run(defaultTestOptions);
     }
 }

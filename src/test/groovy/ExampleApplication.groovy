@@ -1,21 +1,25 @@
-import com.reviselabs.apex.ApexApplication;
+import com.reviselabs.apex.ApexApplication
 
 public class ExampleApplication {
 
-    static ApexApplication run() {
+    static ApexApplication create() {
 
-        def testApp = new ApexApplication();
+        def app = new ApexApplication();
 
-        testApp.parseRequestBody();
-        testApp.get("/", { ctx -> ctx.ok().close('OK') });
-        testApp.post("/", { ctx ->
+        app.parseRequestBody();
+
+        app.get("/", { ctx -> ctx.ok().close('OK') });
+
+        app.post("/", { ctx ->
             ctx.ok().close(ctx.body.toString())
         });
-        testApp.put("/", { ctx ->
+
+        app.put("/", { ctx ->
             ctx.ok().close(ctx.body.toString())
         });
-        testApp.delete("/", { ctx -> ctx.ok().close('DELETED') });
 
-        return testApp;
+        app.delete("/", { ctx -> ctx.ok().close('DELETED') });
+
+        return app;
     }
 }

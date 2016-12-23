@@ -1,6 +1,6 @@
 package com.reviselabs.apex.web
-import com.reviselabs.apex.web.RequestHandler
-import com.reviselabs.apex.web.RoutingContext
+
+import com.google.inject.Inject
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpMethod
 import io.vertx.ext.web.Route
@@ -10,8 +10,9 @@ class RoutingComponent {
     protected Vertx vertx
     protected Router router
 
-    {
-        vertx = Vertx.vertx();
+    @Inject
+    RoutingComponent(Vertx vertx) {
+        this.vertx = vertx;
         router = Router.router(vertx);
     }
 
