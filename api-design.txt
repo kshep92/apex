@@ -44,9 +44,5 @@ class AdminRoutes extends com.reviselabs.apex.web.ApexRouter {
 
 }
 
-Settings that need to be set:
-- View engine/renderer (also accessible via a renderer property to do HTML rendering
-out side of the context of a request; Useful for email template rendering.)
-- Templates folder
-
-app.setTemplateEngine(new FremarkerTemplateEngine(cache: 2, ...))
+Handlers - Cookies, Body, StaticFiles - will be set on the ApexApplication class.
+Other settings - template engine, server configuration, vertx configuration - will be done via ApexConfiguration modules.

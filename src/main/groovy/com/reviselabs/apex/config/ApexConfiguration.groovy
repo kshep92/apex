@@ -7,20 +7,16 @@ import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServer
 import io.vertx.core.http.HttpServerOptions
 
+//TODO: Template engine configuration (MVEL)
 abstract class ApexConfiguration extends AbstractModule {
 
-    private Vertx vertx;
-    private HttpServer server;
-    private HttpServerOptions serverOptions;
+    Vertx vertx;
+    HttpServer server;
+    HttpServerOptions serverOptions;
 
-    {
+    ApexConfiguration() {
         vertx = Vertx.vertx();
         serverOptions = new HttpServerOptions(port: 3000)
-    }
-
-    @Override
-    protected void configure() {
-
     }
 
     @Provides @Singleton
@@ -28,17 +24,9 @@ abstract class ApexConfiguration extends AbstractModule {
         return vertx
     }
 
-    void setVertx(Vertx vertx) {
-        this.vertx = vertx
-    }
-
     @Provides @Singleton
     HttpServer getServer() {
         server = vertx.createHttpServer(serverOptions)
         return server
-    }
-
-    HttpServerOptions serverConfig() {
-        return serverOptions
     }
 }

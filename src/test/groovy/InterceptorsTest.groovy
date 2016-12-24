@@ -9,7 +9,6 @@ class InterceptorsTest extends AppTestSuite {
             promise(context)
             client.get("/sub/user_data").handler({ res ->
                 context.assertEquals(200, res.statusCode())
-                resolve()
                 res.bodyHandler({ body ->
                     context.assertEquals(body.toString(), "kevin@mail.com")
                     resolve()
@@ -18,7 +17,15 @@ class InterceptorsTest extends AppTestSuite {
         })
         .test("Chained interceptors", {context ->
             promise(context)
-            client.get("/sub/someroute", {res ->
+            client.get("/sub/allowed", { res ->
+                context.assertEquals(200, res.statusCode())
+                resolve()
+            }).end()
+        })
+        .test("Chained interceptor blocks unauthorized users", { context ->
+            promise(context)
+            client.get("/sub/forbidden", {res ->
+                context.assertEquals(401, res.statusCode())
                 resolve()
             }).end()
         })

@@ -1,8 +1,5 @@
 package com.reviselabs.apex.config;
 
-/**
- * Created by Kevin on 12/23/2016.
- */
 public class Environment {
     public static Boolean isProd() {
         return getEnv().equals("prod");

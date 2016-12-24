@@ -1,11 +1,12 @@
-package com.reviselabs.apex.web
+package com.reviselabs.apex.web.routing
 
 import com.reviselabs.apex.di.ApplicationContextContainer
+import io.vertx.ext.web.RoutingContext
 
-class RoutingContext implements ApplicationContextContainer {
-    @Delegate io.vertx.ext.web.RoutingContext context;
+class ApexRoutingContext implements ApplicationContextContainer {
+    @Delegate RoutingContext context;
 
-    RoutingContext withDelegate(io.vertx.ext.web.RoutingContext context) {
+    ApexRoutingContext withDelegate(RoutingContext context) {
         this.context = context;
         return this;
     }
@@ -15,17 +16,17 @@ class RoutingContext implements ApplicationContextContainer {
         return applicationContext.getInstance(clazz)
     }
 
-    RoutingContext ok() {
+    ApexRoutingContext ok() {
         response().setStatusCode(200);
         return this;
     }
 
-    RoutingContext badRequest() {
+    ApexRoutingContext badRequest() {
         response().setStatusCode(400);
         return this;
     }
 
-    RoutingContext forbidden() {
+    ApexRoutingContext forbidden() {
         response().setStatusCode(401);
         return this;
     }

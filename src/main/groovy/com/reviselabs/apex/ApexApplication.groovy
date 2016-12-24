@@ -3,20 +3,25 @@ import com.google.inject.Guice
 import com.google.inject.Inject
 import com.google.inject.Injector
 import com.reviselabs.apex.config.ApexConfiguration
-import com.reviselabs.apex.web.RouteGroup
-import com.reviselabs.apex.web.RoutingComponent
+import com.reviselabs.apex.web.routing.ApexRoutingContext
+import com.reviselabs.apex.web.routing.RoutingComponent
+import com.reviselabs.apex.web.routing.SubRouter
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
+import io.vertx.core.Vertx
 import io.vertx.core.http.HttpMethod
 import io.vertx.core.http.HttpServer
+import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.ext.web.handler.CookieHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+//TODO: Configuring of static files
 class ApexApplication implements RoutingComponent {
     private Logger logger;
+    @Inject Vertx vertx
     @Inject HttpServer server;
     private ApexConfiguration configuration;
     private Injector injector;
@@ -39,11 +44,13 @@ class ApexApplication implements RoutingComponent {
     private void init() {
         injector = Guice.createInjector(configuration);
         injector.injectMembers(this)
+        assert vertx != null
+        router = Router.router(vertx)
     }
 
     @Override
-    com.reviselabs.apex.web.RoutingContext createContext(RoutingContext context) {
-        return new com.reviselabs.apex.web.RoutingContext(applicationContext: this).withDelegate(context)
+    ApexRoutingContext createContext(RoutingContext context) {
+        return new ApexRoutingContext(applicationContext: this).withDelegate(context)
     }
 
     ApexApplication addHandler(Handler<RoutingContext> handler, HttpMethod... methods) {
@@ -66,7 +73,7 @@ class ApexApplication implements RoutingComponent {
         return injector.getInstance(clazz);
     }
 
-    void start(int port = configuration.serverConfig().port, Handler<AsyncResult> callback = {}) {
+    void start(int port = configuration.serverOptions.port, Handler<AsyncResult> callback = {}) {
         server.requestHandler(router.&accept)
                 .listen(port, { result ->
                         if(result.succeeded()) {
@@ -77,7 +84,7 @@ class ApexApplication implements RoutingComponent {
     }
 
     void start(Handler<AsyncResult> callback) {
-        start(configuration.serverConfig().port, callback)
+        start(configuration.serverOptions.port, callback)
     }
 
     void stop(Handler<AsyncResult<Object>> callback = {}) {
@@ -90,14 +97,20 @@ class ApexApplication implements RoutingComponent {
         });
     }
 
-    ApexApplication mount(String prefix, Class<? extends RouteGroup> subRouteClass) {
-        def group = injector.getInstance(subRouteClass)
-        group.applicationContext = this
-        router.mountSubRouter(prefix, group.router)
-        return this
+    ApexApplication mount(String prefix, Class<? extends SubRouter> subRouterClass) {
+        def subRouter = injector.getInstance(subRouterClass)
+        subRouter.applicationContext = this
+        subRouter.configure()
+        router.mountSubRouter(prefix, subRouter.router)
+        return this;
     }
 
-    private static class BaseConfiguration extends ApexConfiguration {}
+    private static class BaseConfiguration extends ApexConfiguration {
+        @Override
+        protected void configure() {
+
+        }
+    }
 
     /*private class Something {
         @Delegate StaticHandler delegate = create();

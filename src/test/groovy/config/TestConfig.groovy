@@ -11,6 +11,11 @@ class TestConfig extends ApexConfiguration {
         logger.debug("Using custom configuration")
     }
 
+    @Override
+    protected void configure() {
+
+    }
+
     @SuppressWarnings("GrMethodMayBeStatic")
     @Provides
     Database getDatabase() {

@@ -1,13 +1,17 @@
 package routes
-
-import com.reviselabs.apex.web.RouteGroup
-import com.reviselabs.apex.web.RoutingContext
 import com.reviselabs.apex.web.RequestHandler
+import com.reviselabs.apex.web.routing.SubRouter
+import filters.Filters
 
-class SubRoutes extends RouteGroup {
+class SubRoutes extends SubRouter {
 
-    SubRoutes() {
-        before("/user_data", { it.put("user", "kevin@mail.com"); it.next() })
+    @Override
+    void configure() {
+        before({
+            it.put("user", "kevin@mail.com");
+            it.put("permissions", ['manage_posts', 'manage_users'])
+            it.next()
+        });
 
         get("/", { context ->
             context.ok().close(context.request().path())
@@ -17,21 +21,12 @@ class SubRoutes extends RouteGroup {
             context.ok().close(context.get("user") as String)
         })
 
-        get("/someroute", { it.next() }, { it.ok().close('Hooray!') })
+        get("/allowed", [ Filters.checkPermissions('manage_posts'), { it.ok().close() } ] as RequestHandler[])
+
+        get("/forbidden", [ Filters.checkPermissions('view_finances'), { it.ok().close() } ] as RequestHandler[])
+
+        get("/me",
+                { context -> context.bodyAsJson } as RequestHandler,
+                { it.ok().close() } as RequestHandler)
     }
-
-    @SuppressWarnings("GrMethodMayBeStatic")
-    def RequestHandler checkPermissions(String[] permissions) {
-
-        return new RequestHandler() {
-            @Override
-            void handle(RoutingContext context) {
-                if (permissions.length == 0) context.next()
-                else context.forbidden().close("You do not have permission to view this area.")
-            }
-        }
-
-    }
-
-
 }
