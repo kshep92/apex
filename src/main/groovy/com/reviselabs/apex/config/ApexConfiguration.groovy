@@ -6,9 +6,7 @@ import com.google.inject.Singleton
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServer
 import io.vertx.core.http.HttpServerOptions
-/**
- * Created by ksheppard on 23/12/2016.
- */
+
 abstract class ApexConfiguration extends AbstractModule {
 
     private Vertx vertx;

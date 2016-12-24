@@ -1,19 +1,22 @@
 package config
 
-import com.google.inject.name.Names
+import com.google.inject.Provides
+import com.google.inject.Singleton
 import com.reviselabs.apex.config.ApexConfiguration
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import test.data.Database
 
-/**
- * Created by ksheppard on 23/12/2016.
- */
 class TestConfig extends ApexConfiguration {
-
-    {
-        serverConfig().port = 8000
+    Logger logger = LoggerFactory.getLogger(getClass());
+    TestConfig() {
+        logger.debug("Using custom configuration")
     }
 
-    void configure() {
-        super
-        bind(String.class).annotatedWith(Names.named("key")).toInstance('123');
+    @SuppressWarnings("GrMethodMayBeStatic")
+    @Provides
+    Database getDatabase() {
+        logger.debug("Building database instance.")
+        return new Database(url: 'mysql.com', user: 'admin', password: 'admin')
     }
 }

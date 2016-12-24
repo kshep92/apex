@@ -16,18 +16,19 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class ApexApplication {
-    @Delegate private RoutingComponent delegate;
-    protected static Logger logger;
+    @Delegate(excludes = ['vertx', 'logger', 'init'], interfaces = false )
+    private RoutingComponent delegate;
+    private Logger logger;
     @Inject HttpServer server;
     private ApexConfiguration configuration;
     private Injector injector;
 
     {
         logger = LoggerFactory.getLogger(getClass())
-        configuration = new BaseConfiguration()
     }
 
     ApexApplication() {
+        configuration = new BaseConfiguration()
         hydrate()
     }
 
@@ -38,6 +39,14 @@ class ApexApplication {
 
     RoutingComponent getDelegate() {
         return delegate
+    }
+
+    // Set up dependency injection
+    private void hydrate() {
+        injector = Guice.createInjector(configuration);
+        delegate = injector.getInstance(RoutingComponent)
+        injector.injectMembers(this)
+        this.delegate.applicationContext = this;
     }
 
     ApexApplication addHandler(Handler<RoutingContext> handler, HttpMethod... methods) {
@@ -56,10 +65,8 @@ class ApexApplication {
         return this;
     }
 
-    private void hydrate() {
-        injector = Guice.createInjector(configuration);
-        delegate = injector.getInstance(RoutingComponent)
-        injector.injectMembers(this)
+    def <T> T getInstance(Class<T> clazz) {
+        return injector.getInstance(clazz);
     }
 
     void start(int port = configuration.serverConfig().port, Handler<AsyncResult> callback = {}) {
@@ -86,11 +93,7 @@ class ApexApplication {
         });
     }
 
-    private static class BaseConfiguration extends ApexConfiguration {
-        {
-            logger.debug("Initializing")
-        }
-    }
+    private static class BaseConfiguration extends ApexConfiguration {}
 
     /*private class Something {
         @Delegate StaticHandler delegate = create();

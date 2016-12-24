@@ -1,14 +1,17 @@
 package com.reviselabs.apex.web
 
-/**
- * Created by Kevin on 12/21/2016.
- */
-class RoutingContext {
+import com.reviselabs.apex.di.ApplicationContextContainer
+
+class RoutingContext implements ApplicationContextContainer {
     @Delegate io.vertx.ext.web.RoutingContext context;
 
     RoutingContext withDelegate(io.vertx.ext.web.RoutingContext context) {
         this.context = context;
         return this;
+    }
+
+    def <T> T getInstance(Class<T> clazz) {
+        return applicationContext.getInstance(clazz)
     }
 
     RoutingContext ok() {

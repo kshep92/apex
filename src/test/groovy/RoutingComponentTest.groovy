@@ -1,9 +1,10 @@
+import com.reviselabs.apex.web.RoutingComponent
 import io.vertx.ext.unit.TestSuite
 
 public class RoutingComponentTest extends AppTestSuite {
 
     public static void main(String[] args) {
-        TestSuite.create("ApexApplication Tests")
+        TestSuite.create("RoutingComponent Tests")
             .before({context ->
                 // Start the application and configure routes
                 startServer(context);
@@ -53,10 +54,16 @@ public class RoutingComponentTest extends AppTestSuite {
                     })
                 }).end()
             })
+            .test("Make sure RoutingComponent constructors work", {
+                /*def routes = new AdminRoutes();
+                it.assertNotNull(routes.vertx)*/
+            })
             .after({context ->
                 // Shut down the application
                 app.stop(context.asyncAssertSuccess());
             })
             .run(defaultTestOptions);
     }
+
+    static class AdminRoutes extends RoutingComponent {}
 }
