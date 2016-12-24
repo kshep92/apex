@@ -8,7 +8,7 @@ class DependencyInjectionTest extends AppTestSuite {
         TestSuite.create("Dependency Injection Tests")
         .before({ startServer(it) })
         .test("Delegate is initialized", { context ->
-            context.assertTrue(app.delegate.router != null)
+            context.assertTrue(app.router != null)
         })
         .test("Can receive requests", {context ->
             promise(context)

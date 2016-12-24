@@ -1,9 +1,9 @@
 package com.reviselabs.apex
-
 import com.google.inject.Guice
 import com.google.inject.Inject
 import com.google.inject.Injector
 import com.reviselabs.apex.config.ApexConfiguration
+import com.reviselabs.apex.web.RouteGroup
 import com.reviselabs.apex.web.RoutingComponent
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
@@ -15,9 +15,7 @@ import io.vertx.ext.web.handler.CookieHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ApexApplication {
-    @Delegate(excludes = ['vertx', 'logger', 'init'], interfaces = false )
-    private RoutingComponent delegate;
+class ApexApplication implements RoutingComponent {
     private Logger logger;
     @Inject HttpServer server;
     private ApexConfiguration configuration;
@@ -29,24 +27,23 @@ class ApexApplication {
 
     ApexApplication() {
         configuration = new BaseConfiguration()
-        hydrate()
+        init()
     }
 
     ApexApplication(ApexConfiguration configuration) {
         this.configuration = configuration
-        hydrate()
-    }
-
-    RoutingComponent getDelegate() {
-        return delegate
+        init()
     }
 
     // Set up dependency injection
-    private void hydrate() {
+    private void init() {
         injector = Guice.createInjector(configuration);
-        delegate = injector.getInstance(RoutingComponent)
         injector.injectMembers(this)
-        this.delegate.applicationContext = this;
+    }
+
+    @Override
+    com.reviselabs.apex.web.RoutingContext createContext(RoutingContext context) {
+        return new com.reviselabs.apex.web.RoutingContext(applicationContext: this).withDelegate(context)
     }
 
     ApexApplication addHandler(Handler<RoutingContext> handler, HttpMethod... methods) {
@@ -91,6 +88,13 @@ class ApexApplication {
                 callback.handle(result)
             } else logger.error(result.cause().message)
         });
+    }
+
+    ApexApplication mount(String prefix, Class<? extends RouteGroup> subRouteClass) {
+        def group = injector.getInstance(subRouteClass)
+        group.applicationContext = this
+        router.mountSubRouter(prefix, group.router)
+        return this
     }
 
     private static class BaseConfiguration extends ApexConfiguration {}

@@ -10,13 +10,18 @@ class Main {
 
  // Or
 
- app.static('/assets/*, new StaticHandlerOptions(cacheSize: 300)) //Proxy for StaticHandler.create()
+ app.static('/assets/*, new StaticHandlerOptions(cacheSize: 300)) // Proxy for StaticHandler.create()
 
  app.before("/secured", context -> { /* check for authentication */ } );
 
+ app.put('/users/:id', { ctx ->
+   def dao = ctx.getInstance(DAO.class)
+   def user = dao.findById(ctx.getParam('id').intValue())
+ })
+
  app.get("/", context -> { context.sendFile("views/index.html"); });
 
- app.get("/view", context -> { context.html("dashboard.html", [email: 'kevin@mail.com']) }) // Rendering a view. We will use Handlebars by default.
+ app.get("/view", context -> { context.render("dashboard.html", [email: 'kevin@mail.com']) }) // Rendering a view. We will use MVEL by default.
 
  app.post("/users", { ctx -> /* Handle form data */ } );
 
@@ -45,8 +50,3 @@ out side of the context of a request; Useful for email template rendering.)
 - Templates folder
 
 app.setTemplateEngine(new FremarkerTemplateEngine(cache: 2, ...))
-
-app.put('/users/:id', { ctx -> 
-  def dao = ctx.inflate(DAO.class)
-  def user = dao.findById(ctx.getParam('id').intValue())
-})

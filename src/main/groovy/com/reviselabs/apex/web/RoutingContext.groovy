@@ -10,6 +10,7 @@ class RoutingContext implements ApplicationContextContainer {
         return this;
     }
 
+    @Override
     def <T> T getInstance(Class<T> clazz) {
         return applicationContext.getInstance(clazz)
     }

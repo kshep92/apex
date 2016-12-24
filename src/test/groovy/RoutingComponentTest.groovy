@@ -1,4 +1,3 @@
-import com.reviselabs.apex.web.RoutingComponent
 import io.vertx.ext.unit.TestSuite
 
 public class RoutingComponentTest extends AppTestSuite {
@@ -64,6 +63,4 @@ public class RoutingComponentTest extends AppTestSuite {
             })
             .run(defaultTestOptions);
     }
-
-    static class AdminRoutes extends RoutingComponent {}
 }

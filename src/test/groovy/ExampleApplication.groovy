@@ -1,5 +1,6 @@
 import com.reviselabs.apex.ApexApplication
 import config.TestConfig
+import routes.SubRoutes
 import test.data.Database
 
 public class ExampleApplication {
@@ -25,6 +26,8 @@ public class ExampleApplication {
         });
 
         app.delete("/", { ctx -> ctx.ok().close('DELETED') });
+
+        app.mount("/sub", SubRoutes)
 
         return app;
     }

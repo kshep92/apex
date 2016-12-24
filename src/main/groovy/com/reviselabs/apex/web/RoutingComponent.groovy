@@ -1,44 +1,16 @@
 package com.reviselabs.apex.web
+
 import com.google.inject.Inject
-import com.reviselabs.apex.di.ApplicationContextContainer
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpMethod
-import io.vertx.core.logging.Logger
-import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 
-class RoutingComponent implements ApplicationContextContainer {
-    private Vertx vertx
-    private Router router
-    private Logger logger;
+import java.util.logging.Handler
 
-    {
-        logger = LoggerFactory.getLogger(getClass());
-    }
-
-    RoutingComponent() {
-        vertx = Vertx.vertx(); // Will be appropriately configured when mounted to an ApexApplication
-        init()
-    }
-
-    @Inject
-    RoutingComponent(Vertx vertx) {
-        this.vertx = vertx;
-        init()
-    }
-
-    private void init() {
-        router = Router.router(vertx);
-    }
-
-    public Router getRouter() {
-        return router;
-    }
-
-    public Vertx getVertx() {
-        return vertx;
-    }
+trait RoutingComponent {
+    @Inject Vertx vertx
+    Router router = Router.router(vertx)
 
     private Route doRoute(HttpMethod method, String url, RequestHandler handler) {
         return router.route(method, url)
@@ -47,6 +19,11 @@ class RoutingComponent implements ApplicationContextContainer {
 
     public Route get(String url, RequestHandler handler) {
         return doRoute(HttpMethod.GET, url, handler);
+    }
+
+    // TODO: Get this to work
+    public void get(String url, Handler... handlers) {
+        handlers.each { handler -> doRoute(HttpMethod.GET, url, handler as RequestHandler) }
     }
 
     public Route post(String url, RequestHandler handler) {
@@ -61,12 +38,14 @@ class RoutingComponent implements ApplicationContextContainer {
         return doRoute(HttpMethod.DELETE, url, handler);
     }
 
-    private RoutingContext createContext(io.vertx.ext.web.RoutingContext context) {
-        return new RoutingContext(applicationContext: applicationContext).withDelegate(context);
+    public Route before(String url, RequestHandler handler) {
+        return router.route(url).handler({context -> handler.handle(createContext(context))})
     }
 
-    @Override
-    def <T> T getInstance(Class<T> clazz) {
-        return applicationContext.getInstance(clazz)
+    public Route before(RequestHandler handler) {
+        return router.route().handler({context -> handler.handle(createContext(context))})
     }
+
+    abstract RoutingContext createContext(io.vertx.ext.web.RoutingContext context)
+
 }
