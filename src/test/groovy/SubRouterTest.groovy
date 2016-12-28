@@ -1,6 +1,6 @@
 import io.vertx.ext.unit.TestSuite
 
-class RouteGroupTest extends AppTestSuite {
+class SubRouterTest extends AppTestSuite {
 
     static main(args) {
         TestSuite.create("RouteGroup Tests")
