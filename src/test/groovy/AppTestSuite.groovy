@@ -1,15 +1,13 @@
 
 
+
 import com.reviselabs.apex.ApexApplication
 import io.vertx.core.http.HttpClient
 import io.vertx.core.http.HttpClientOptions
-import io.vertx.core.logging.Logger
-import io.vertx.core.logging.LoggerFactory
 import io.vertx.ext.unit.Async
 import io.vertx.ext.unit.TestContext
 import io.vertx.ext.unit.TestOptions
 import io.vertx.ext.unit.report.ReportOptions
-
 
 class AppTestSuite {
 

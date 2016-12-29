@@ -33,7 +33,7 @@ class Main {
 
 // Router
 
-class AdminRoutes extends com.reviselabs.apex.web.ApexRouter {
+class AdminRoutes extends SubRouter {
 
   {
     before("/something", ctx -> { /* Run a before filter */ });
@@ -46,3 +46,10 @@ class AdminRoutes extends com.reviselabs.apex.web.ApexRouter {
 
 Handlers - Cookies, Body, StaticFiles - will be set on the ApexApplication class.
 Other settings - template engine, server configuration, vertx configuration - will be done via ApexConfiguration modules.
+
+// Apex Application
+
+init() {
+    DependencyManager.initializeWith(configuration)
+    DependencyManager.getInjector().injectMembers(this)
+}

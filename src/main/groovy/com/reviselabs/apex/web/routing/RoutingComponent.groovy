@@ -11,7 +11,7 @@ trait RoutingComponent {
 //    private methods will not appear in the trait contract interface
     private RoutingComponent doRoute(HttpMethod method, String url, RequestHandler handler) {
         router.route(method, url)
-                .handler({context -> handler.handle(createContext(context))});
+                .handler({context -> handler.handle(new ApexRoutingContext(context))});
         return this
     }
 
@@ -53,15 +53,13 @@ trait RoutingComponent {
     }
 
     public RoutingComponent before(String url, RequestHandler handler) {
-        router.route(url).handler({context -> handler.handle(createContext(context))})
+        router.route(url).handler({context -> handler.handle(new ApexRoutingContext(context))})
         return this
     }
 
     public RoutingComponent before(RequestHandler handler) {
-        router.route().handler({context -> handler.handle(createContext(context))})
+        router.route().handler({context -> handler.handle(new ApexRoutingContext(context))})
         return this
     }
-
-    abstract ApexRoutingContext createContext(RoutingContext context)
 
 }

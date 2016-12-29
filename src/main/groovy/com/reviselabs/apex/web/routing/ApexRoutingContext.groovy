@@ -6,14 +6,8 @@ import io.vertx.ext.web.RoutingContext
 class ApexRoutingContext implements ApplicationContextContainer {
     @Delegate RoutingContext context;
 
-    ApexRoutingContext withDelegate(RoutingContext context) {
+    ApexRoutingContext(RoutingContext context) {
         this.context = context;
-        return this;
-    }
-
-    @Override
-    def <T> T getInstance(Class<T> clazz) {
-        return applicationContext.getInstance(clazz)
     }
 
     ApexRoutingContext ok() {

@@ -1,9 +1,9 @@
 package com.reviselabs.apex
-import com.google.inject.Guice
+
 import com.google.inject.Inject
-import com.google.inject.Injector
 import com.reviselabs.apex.config.ApexConfiguration
-import com.reviselabs.apex.web.routing.ApexRoutingContext
+import com.reviselabs.apex.di.ApplicationContextContainer
+import com.reviselabs.apex.di.DependencyManager
 import com.reviselabs.apex.web.routing.RoutingComponent
 import com.reviselabs.apex.web.routing.SubRouter
 import io.vertx.core.AsyncResult
@@ -17,14 +17,12 @@ import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.ext.web.handler.CookieHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
 //TODO: Configuring of static files
-class ApexApplication implements RoutingComponent {
+class ApexApplication implements RoutingComponent, ApplicationContextContainer {
     private Logger logger;
     @Inject Vertx vertx
     @Inject HttpServer server;
     private ApexConfiguration configuration;
-    private Injector injector;
 
     {
         logger = LoggerFactory.getLogger(getClass())
@@ -42,15 +40,9 @@ class ApexApplication implements RoutingComponent {
 
     // Set up dependency injection
     private void init() {
-        injector = Guice.createInjector(configuration);
-        injector.injectMembers(this)
+        DependencyManager.initializeWith(configuration).injectMembers(this);
         assert vertx != null
         router = Router.router(vertx)
-    }
-
-    @Override
-    ApexRoutingContext createContext(RoutingContext context) {
-        return new ApexRoutingContext(applicationContext: this).withDelegate(context)
     }
 
     ApexApplication addHandler(Handler<RoutingContext> handler, HttpMethod... methods) {
@@ -67,10 +59,6 @@ class ApexApplication implements RoutingComponent {
     ApexApplication parseRequestBody() {
         addHandler(BodyHandler.create(), HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH);
         return this;
-    }
-
-    def <T> T getInstance(Class<T> clazz) {
-        return injector.getInstance(clazz);
     }
 
     void start(int port = configuration.serverOptions.port, Handler<AsyncResult> callback = {}) {
@@ -98,8 +86,8 @@ class ApexApplication implements RoutingComponent {
     }
 
     ApexApplication mount(String prefix, Class<? extends SubRouter> subRouterClass) {
-        def subRouter = injector.getInstance(subRouterClass)
-        subRouter.applicationContext = this
+        SubRouter subRouter = getInstance(subRouterClass)
+        subRouter.parent = this.router
         subRouter.configure()
         router.mountSubRouter(prefix, subRouter.router)
         return this;

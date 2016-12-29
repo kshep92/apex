@@ -1,11 +1,13 @@
 import com.reviselabs.apex.ApexApplication
 import config.TestConfig
+import org.slf4j.LoggerFactory
 import routes.SubRoutes
 import test.data.Database
 
 public class ExampleApplication {
 
     static ApexApplication create() {
+        def logger = LoggerFactory.getLogger("ExampleApplication");
 
         def app = new ApexApplication(new TestConfig());
         app.parseRequestBody();
@@ -18,6 +20,7 @@ public class ExampleApplication {
         })
 
         app.post("/", { ctx ->
+            logger.debug("In a callback")
             ctx.ok().close(ctx.body.toString())
         });
 
