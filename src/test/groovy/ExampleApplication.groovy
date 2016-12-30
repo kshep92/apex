@@ -22,7 +22,7 @@ public class ExampleApplication {
             ctx.ok().end(url)
         })
 
-        app.get('/greeting', {ctx ->
+        app.get('/greeting', { ctx ->
             ctx.render("index", [title: "Greeting Page", greeting: "Hello, world!"]);
         })
 

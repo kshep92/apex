@@ -1,3 +1,3 @@
 (function() {
-    console.log('Application ready.')
-})()
+    console.log('Application ready...')
+})();

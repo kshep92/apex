@@ -1,4 +1,6 @@
 package com.reviselabs.apex.web.routing
+
+import com.reviselabs.apex.di.DependencyManager
 import com.reviselabs.apex.web.RequestHandler
 import io.vertx.core.http.HttpMethod
 import io.vertx.ext.web.Router
@@ -11,8 +13,15 @@ trait RoutingComponent {
 //    private methods will not appear in the trait contract interface
     private RoutingComponent doRoute(HttpMethod method, String url, RequestHandler handler) {
         router.route(method, url)
-                .handler({context -> handler.handle(new ApexRoutingContext(context))});
+                .handler({context -> handler.handle(createContext(context))});
         return this
+    }
+
+    @SuppressWarnings("GrMethodMayBeStatic")
+    public ApexRoutingContext createContext(RoutingContext context) {
+        ApexRoutingContext apexRoutingContext = DependencyManager.injector.getInstance(ApexRoutingContext);
+        apexRoutingContext.setContext(context)
+        return apexRoutingContext
     }
 
     public RoutingComponent get(String url, RequestHandler handler) {
@@ -63,7 +72,7 @@ trait RoutingComponent {
     }
 
     public ApexRoutingContext wrap(RoutingContext context) {
-        return new ApexRoutingContext(context);
+        return createContext(context);
     }
 
 }

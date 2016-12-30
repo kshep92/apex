@@ -26,11 +26,6 @@ class ApexApplication implements RoutingComponent, ApplicationContextContainer {
     private ApexConfiguration configuration;
     private StaticHandler defaultStaticHandler;
 
-    {
-        logger = LoggerFactory.getLogger(getClass())
-        defaultStaticHandler = StaticHandler.create("public")
-    }
-
     ApexApplication() {
         configuration = new BaseConfiguration()
         init()
@@ -41,8 +36,10 @@ class ApexApplication implements RoutingComponent, ApplicationContextContainer {
         init()
     }
 
-    // Set up dependency injection
+    // Initialize fields and set up dependency injection
     private void init() {
+        logger = LoggerFactory.getLogger(getClass())
+        defaultStaticHandler = StaticHandler.create("public")
         DependencyManager.initializeWith(configuration).injectMembers(this);
         assert vertx != null
         router = Router.router(vertx)

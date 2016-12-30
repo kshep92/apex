@@ -2,14 +2,14 @@ package com.reviselabs.apex.config;
 
 public class Environment {
     public static Boolean isProd() {
-        return getEnv().equals("prod");
+        return getEnv().equals("production");
     }
 
     public static Boolean isDev() {
-        return getEnv().equals("dev");
+        return getEnv().equals("development");
     }
 
     private static String getEnv() {
-        return (System.getProperty("env") == null) ? "dev" : "prod";
+        return (System.getProperty("apex.env") == null) ? "development" : "production";
     }
 }

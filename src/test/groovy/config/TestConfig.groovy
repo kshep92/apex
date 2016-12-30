@@ -13,7 +13,8 @@ class TestConfig extends ApexConfiguration {
 
     @Override
     protected void configure() {
-
+        setTemplatesDirectory("src/test/files/templates")
+//        (getTemplateEngine() as MVELTemplateEngine).setMaxCacheSize(...)
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")
