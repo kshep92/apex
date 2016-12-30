@@ -15,17 +15,20 @@ import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.ext.web.handler.CookieHandler
+import io.vertx.ext.web.handler.StaticHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-//TODO: Configuring of static files
+
 class ApexApplication implements RoutingComponent, ApplicationContextContainer {
     private Logger logger;
     @Inject Vertx vertx
     @Inject HttpServer server;
     private ApexConfiguration configuration;
+    private StaticHandler defaultStaticHandler;
 
     {
         logger = LoggerFactory.getLogger(getClass())
+        defaultStaticHandler = StaticHandler.create("public")
     }
 
     ApexApplication() {
@@ -45,6 +48,10 @@ class ApexApplication implements RoutingComponent, ApplicationContextContainer {
         router = Router.router(vertx)
     }
 
+    public StaticHandler getDefaultStaticHandler() {
+        return defaultStaticHandler;
+    }
+
     ApexApplication addHandler(Handler<RoutingContext> handler, HttpMethod... methods) {
         if(methods) methods.each { router.route().method(it).handler(handler) }
         else router.route().handler(handler);
@@ -58,6 +65,16 @@ class ApexApplication implements RoutingComponent, ApplicationContextContainer {
 
     ApexApplication parseRequestBody() {
         addHandler(BodyHandler.create(), HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH);
+        return this;
+    }
+
+    ApexApplication assets(String url, StaticHandler handler = defaultStaticHandler) {
+        router.route(url).handler(handler)
+        return this;
+    }
+
+    ApexApplication assets(String url, String webRoot, StaticHandler handler = defaultStaticHandler) {
+        router.route(url).handler(handler.setWebRoot(webRoot))
         return this;
     }
 

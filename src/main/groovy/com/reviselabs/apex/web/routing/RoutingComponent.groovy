@@ -62,4 +62,8 @@ trait RoutingComponent {
         return this
     }
 
+    public ApexRoutingContext wrap(RoutingContext context) {
+        return new ApexRoutingContext(context);
+    }
+
 }

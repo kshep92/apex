@@ -10,7 +10,10 @@ public class ExampleApplication {
         def logger = LoggerFactory.getLogger("ExampleApplication");
 
         def app = new ApexApplication(new TestConfig());
+
         app.parseRequestBody();
+
+        app.assets("/assets/*", "src/test/files");
 
         app.get("/", { ctx -> ctx.ok().close('OK') });
 

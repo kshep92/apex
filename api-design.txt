@@ -1,4 +1,4 @@
-class Main {
+static void main(args) {
 
  def app = new ApexApplication(new MyConfigurationModule());
 
@@ -10,7 +10,7 @@ class Main {
 
  // Or
 
- app.static('/assets/*, new StaticHandlerOptions(cacheSize: 300)) // Proxy for StaticHandler.create()
+ app.assets('/assets/*, new StaticHandlerOptions(cacheSize: 300)) // Proxy for StaticHandler.create()
 
  app.before("/secured", context -> { /* check for authentication */ } );
 
@@ -35,7 +35,8 @@ class Main {
 
 class AdminRoutes extends SubRouter {
 
-  {
+  @Override
+  void configure() {
     before("/something", ctx -> { /* Run a before filter */ });
 
     get("/", ctx -> {});
@@ -53,3 +54,4 @@ init() {
     DependencyManager.initializeWith(configuration)
     DependencyManager.getInjector().injectMembers(this)
 }
+
