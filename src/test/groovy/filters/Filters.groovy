@@ -12,7 +12,7 @@ class Filters {
         return { context ->
             String[] userPermissions = context.get("permissions");
             if(userPermissions.find({ permissions.contains(it) })) context.next()
-            else context.forbidden().close("You do not have permission to view this area.")
+            else context.forbidden().end("You do not have permission to view this area.")
         }
     }
 }

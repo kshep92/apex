@@ -20,7 +20,7 @@ public class TestApplication {
 
         app.get("/",
                 ctx -> ctx.put("name", "Kevin Sheppard").next(),
-                ctx -> ctx.ok().close("Hello, " + ctx.get("name")))
+                ctx -> ctx.ok().end("Hello, " + ctx.get("name")))
         .get("/custom/:name", ctx -> {});
 
         app.mount("/sub", Sub.class).start();

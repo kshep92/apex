@@ -14,19 +14,19 @@ class SubRoutes extends SubRouter {
         });
 
         get("/", { context ->
-            context.ok().close(context.request().path())
+            context.ok().end(context.request().path())
         })
 
         get("/user_data", { context ->
-            context.ok().close(context.get("user") as String)
+            context.ok().end(context.get("user") as String)
         })
 
-        get("/allowed", [ Filters.checkPermissions('manage_posts'), { it.ok().close() } ] as RequestHandler[])
+        get("/allowed", [ Filters.checkPermissions('manage_posts'), { it.ok().end() } ] as RequestHandler[])
 
-        get("/forbidden", [ Filters.checkPermissions('view_finances'), { it.ok().close() } ] as RequestHandler[])
+        get("/forbidden", [ Filters.checkPermissions('view_finances'), { it.ok().end() } ] as RequestHandler[])
 
         get("/me",
                 { context -> context.bodyAsJson } as RequestHandler,
-                { it.ok().close() } as RequestHandler)
+                { it.ok().end() } as RequestHandler)
     }
 }

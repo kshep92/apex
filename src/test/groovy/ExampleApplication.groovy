@@ -15,23 +15,27 @@ public class ExampleApplication {
 
         app.assets("/assets/*", "src/test/files");
 
-        app.get("/", { ctx -> ctx.ok().close('OK') });
+        app.get("/", { ctx -> ctx.ok().end('OK') });
 
         app.get('/database_info', { ctx ->
             def url = ctx.getInstance(Database).url
-            ctx.ok().close(url)
+            ctx.ok().end(url)
+        })
+
+        app.get('/greeting', {ctx ->
+            ctx.render("index", [title: "Greeting Page", greeting: "Hello, world!"]);
         })
 
         app.post("/", { ctx ->
             logger.debug("In a callback")
-            ctx.ok().close(ctx.body.toString())
+            ctx.ok().end(ctx.body.toString())
         });
 
         app.put("/", { ctx ->
-            ctx.ok().close(ctx.body.toString())
+            ctx.ok().end(ctx.body.toString())
         });
 
-        app.delete("/", { ctx -> ctx.ok().close('DELETED') });
+        app.delete("/", { ctx -> ctx.ok().end('DELETED') });
 
         app.mount("/sub", SubRoutes)
 

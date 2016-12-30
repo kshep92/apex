@@ -10,7 +10,7 @@ static void main(args) {
 
  // Or
 
- app.assets('/assets/*, new StaticHandlerOptions(cacheSize: 300)) // Proxy for StaticHandler.create()
+ app.assets('/assets/*, "public/assets", app.getDefaultStaticHandler().enableCaching(true)) // Proxy for StaticHandler.create()
 
  app.before("/secured", context -> { /* check for authentication */ } );
 
