@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class DependencyManager {
     private static Injector injector;
-    private static Logger logger = LoggerFactory.getLogger(DependencyManager.class);
+    private static Logger logger = LoggerFactory.getLogger(DependencyManager);
 
     public static Injector initializeWith(ApexConfiguration configuration) {
         if(injector == null) {

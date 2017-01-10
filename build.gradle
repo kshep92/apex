@@ -1,5 +1,5 @@
 group 'com.reviselabs'
-version '0.1.0'
+version '1.0.0-SNAPSHOT'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
@@ -19,11 +19,11 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-web', version: '3.3.3'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
     compile group: 'io.vertx', name: 'vertx-unit', version: '3.3.3'
-    compile group: 'io.vertx', name: 'vertx-web-templ-mvel', version: '3.3.3'
+    testCompile group: 'io.vertx', name: 'vertx-web-templ-mvel', version: '3.3.3'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
-task runApp(type: JavaExec) {
+/*task runApp(type: JavaExec) {
     main = 'com.reviselabs.apex.MyApp'
     classpath = sourceSets.main.runtimeClasspath
-}
+}*/

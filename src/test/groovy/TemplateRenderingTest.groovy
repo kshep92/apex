@@ -1,8 +1,5 @@
 import io.vertx.ext.unit.TestSuite
 
-/**
- * Created by ksheppard on 30/12/2016.
- */
 class TemplateRenderingTest extends AppTestSuite {
 
     static void main(args) {

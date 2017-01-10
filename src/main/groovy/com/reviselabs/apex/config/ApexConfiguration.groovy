@@ -6,7 +6,6 @@ import com.google.inject.name.Named
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServer
 import io.vertx.core.http.HttpServerOptions
-import io.vertx.ext.web.templ.MVELTemplateEngine
 import io.vertx.ext.web.templ.TemplateEngine
 
 abstract class ApexConfiguration extends AbstractModule {
@@ -20,7 +19,6 @@ abstract class ApexConfiguration extends AbstractModule {
     ApexConfiguration() {
         vertx = Vertx.vertx();
         serverOptions = new HttpServerOptions(port: 3000)
-        templateEngine = MVELTemplateEngine.create()
     }
 
     @Provides @Singleton

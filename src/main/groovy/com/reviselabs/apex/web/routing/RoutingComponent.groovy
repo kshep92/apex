@@ -62,12 +62,12 @@ trait RoutingComponent {
     }
 
     public RoutingComponent before(String url, RequestHandler handler) {
-        router.route(url).handler({context -> handler.handle(new ApexRoutingContext(context))})
+        router.route(url).handler({context -> handler.handle(createContext(context))})
         return this
     }
 
     public RoutingComponent before(RequestHandler handler) {
-        router.route().handler({context -> handler.handle(new ApexRoutingContext(context))})
+        router.route().handler({context -> handler.handle(createContext(context))})
         return this
     }
 

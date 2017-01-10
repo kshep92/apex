@@ -18,7 +18,7 @@ public class ExampleApplication {
         app.get("/", { ctx -> ctx.ok().end('OK') });
 
         app.get('/database_info', { ctx ->
-            def url = ctx.getInstance(Database).url
+            String url = ctx.getInstance(Database).url
             ctx.ok().end(url)
         })
 

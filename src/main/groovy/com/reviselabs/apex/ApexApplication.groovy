@@ -114,8 +114,4 @@ class ApexApplication implements RoutingComponent, ApplicationContextContainer {
         }
     }
 
-    /*private class Something {
-        @Delegate StaticHandler delegate = create();
-    }*/
-
 }
