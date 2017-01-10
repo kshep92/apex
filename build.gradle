@@ -5,8 +5,6 @@ apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'maven'
 
-archivesBaseName = 'apex'
-
 sourceCompatibility = 1.8
 
 repositories {
@@ -22,4 +20,29 @@ dependencies {
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     testCompile group: 'io.vertx', name: 'vertx-web-templ-mvel', version: '3.3.3'
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+task createPom {
+    pom {
+        project {
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            inceptionYear '2016'
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("$buildDir/libs/pom.xml")
+}
+
+task dist(type: Zip, dependsOn: [jar, createPom]) {
+    from ("$buildDir/libs/")
+    destinationDir file('dist')
 }
