@@ -1,6 +1,6 @@
-package com.reviselabs.apex.web.routing;
+package com.reviselabs.apex.routing;
 
 // A means to force users to implement the configure() method
-interface ISubRouter {
+public interface ISubRouter {
     void configure();
 }

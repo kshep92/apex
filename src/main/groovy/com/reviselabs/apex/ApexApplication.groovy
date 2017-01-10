@@ -4,8 +4,8 @@ import com.google.inject.Inject
 import com.reviselabs.apex.config.ApexConfiguration
 import com.reviselabs.apex.di.ApplicationContextContainer
 import com.reviselabs.apex.di.DependencyManager
-import com.reviselabs.apex.web.routing.RoutingComponent
-import com.reviselabs.apex.web.routing.SubRouter
+import com.reviselabs.apex.routing.RoutingComponent
+import com.reviselabs.apex.routing.SubRouter
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
 import io.vertx.core.Vertx
@@ -19,7 +19,7 @@ import io.vertx.ext.web.handler.StaticHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ApexApplication implements RoutingComponent, ApplicationContextContainer {
+class ApexApplication extends RoutingComponent implements ApplicationContextContainer {
     private Logger logger;
     @Inject Vertx vertx
     @Inject HttpServer server;

@@ -1,4 +1,4 @@
-import com.reviselabs.apex.web.routing.SubRouter;
+import com.reviselabs.apex.routing.SubRouter;
 
 class Sub extends SubRouter {
     @Override

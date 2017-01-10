@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 
 public class DependencyManager {
     private static Injector injector;
-    private static Logger logger = LoggerFactory.getLogger(DependencyManager);
+    private static Logger logger = LoggerFactory.getLogger(DependencyManager.class);
 
     public static Injector initializeWith(ApexConfiguration configuration) {
         if(injector == null) {
-            logger.debug("Initializing injector")
+            logger.debug("Initializing injector");
             injector = Guice.createInjector(configuration);
         }
         return getInjector();

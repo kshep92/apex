@@ -25,7 +25,7 @@ class InterceptorsTest extends AppTestSuite {
         .test("Chained interceptor blocks unauthorized users", { context ->
             promise(context)
             client.get("/sub/forbidden", {res ->
-                context.assertEquals(401, res.statusCode())
+                context.assertEquals(403, res.statusCode())
                 resolve()
             }).end()
         })

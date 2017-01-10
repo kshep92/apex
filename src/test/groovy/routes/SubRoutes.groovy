@@ -1,6 +1,6 @@
 package routes
-import com.reviselabs.apex.web.RequestHandler
-import com.reviselabs.apex.web.routing.SubRouter
+import com.reviselabs.apex.routing.RequestHandler
+import com.reviselabs.apex.routing.SubRouter
 import filters.Filters
 
 class SubRoutes extends SubRouter {

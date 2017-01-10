@@ -1,6 +1,6 @@
 package filters
 
-import com.reviselabs.apex.web.RequestHandler
+import com.reviselabs.apex.routing.RequestHandler
 
 /**
  * Created by Kevin on 12/24/2016.
