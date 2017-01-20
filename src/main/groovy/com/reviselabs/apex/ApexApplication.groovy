@@ -2,6 +2,7 @@ package com.reviselabs.apex
 
 import com.google.inject.Inject
 import com.reviselabs.apex.config.ApexConfiguration
+import com.reviselabs.apex.config.Environment
 import com.reviselabs.apex.di.ApplicationContextContainer
 import com.reviselabs.apex.di.DependencyManager
 import com.reviselabs.apex.routing.RoutingComponent
@@ -65,13 +66,13 @@ class ApexApplication extends RoutingComponent implements ApplicationContextCont
         return this;
     }
 
-    ApexApplication assets(String url, StaticHandler handler = defaultStaticHandler) {
-        router.route(url).handler(handler)
+    ApexApplication staticFiles(String url, StaticHandler handler = defaultStaticHandler) {
+        router.get(url).handler(handler)
         return this;
     }
 
-    ApexApplication assets(String url, String webRoot, StaticHandler handler = defaultStaticHandler) {
-        router.route(url).handler(handler.setWebRoot(webRoot))
+    ApexApplication staticFiles(String url, String webRoot, StaticHandler handler = defaultStaticHandler) {
+        router.get(url).handler(handler.setWebRoot(webRoot))
         return this;
     }
 
@@ -105,6 +106,12 @@ class ApexApplication extends RoutingComponent implements ApplicationContextCont
         subRouter.configure()
         router.mountSubRouter(prefix, subRouter.router)
         return this;
+    }
+
+    StaticHandler createStaticHandler(String webRoot = "public") {
+        StaticHandler handler = StaticHandler.create();
+        handler.setWebRoot(webRoot).setCachingEnabled(Environment.isProd());
+        return handler;
     }
 
     private static class BaseConfiguration extends ApexConfiguration {
