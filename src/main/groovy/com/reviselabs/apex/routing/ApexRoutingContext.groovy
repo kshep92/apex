@@ -53,6 +53,14 @@ class ApexRoutingContext implements ApplicationContextContainer {
         response().setStatusCode(HttpURLConnection.HTTP_MOVED_TEMP).putHeader("location", location)
     }
 
+    void renderJson(String body, int statusCode = 200) {
+        response()
+                .setStatusCode(statusCode)
+                .putHeader("content-type", "application/json")
+                .putHeader("content-length", String.valueOf(body.length()))
+                .write(body).end();
+    }
+
     void renderText(String text, int statusCode = 200) {
         response()
                 .setStatusCode(statusCode)
