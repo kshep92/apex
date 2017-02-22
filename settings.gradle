@@ -1,2 +1,6 @@
 rootProject.name = 'apex'
 
+include ':validation-tools'
+
+project(':validation-tools').projectDir = file('../validation-tools')
+
